@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+using Microsoft.Win32;
+
+namespace bai4
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+                      
+        }
+        RegistryKey registryKey = Registry.CurrentUser.OpenSubKey
+                   ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        private void RegisterInStartup(bool isChecked)
+        {
+           
+
+            if (isChecked)
+            {
+                // Đăng ký stratup cùng Windows
+                registryKey.SetValue("bai4", Directory.GetCurrentDirectory() + "\\bai4.exe");
+            }
+            else
+            {
+                // Hủy đăng ký
+                registryKey.DeleteValue("bai4");
+            }
+        }
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            this.Hide();
+                
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            if (registryKey.GetValue("bai4") != null)
+            {
+                MessageBox.Show("18212612", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                RegisterInStartup(true);
+            }
+        }
+    }
+}
